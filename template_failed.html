@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Commande en {{order_status}} </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        ul {
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>La commande numéro {{order_number}} est en ERREUR  : {{order_status}} </h1>
+    </div>
+    <p>Les détails sont les suivants :</p>
+    <p> NOMBRE DE CD COMMANDER AU TOTAL : {{total_product}}</p>
+    <ul>
+        <li>Nom : {{FIRST_NAME}}</li>
+        <li>Prénom : {{LAST_NAME}}</li>
+        <li>Adresse : {{ADDRESS}}</li>
+        <li>Ville : {{CITY}}</li>
+        <li>Code Postal : {{ZIP}}</li>
+        <li>Téléphone : {{PHONE}}</li>
+        <li>Email : {{EMAIL}}</li>
+        <li>La carte utilisée est la n*{{id_card}}, nom REVOLUT : {{name_card}}</li>
+    </ul>
+</body>
+</html>
