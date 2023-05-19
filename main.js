@@ -124,7 +124,7 @@ const puppeteerFunction = async () => {
       PHONE
     } = data;
     console.log("INSTANCE " +currentId + ": " + "Informations de l'utilisateur : ", data);
-    deleteLine('user_info.csv', 2);
+    await deleteLine('user_info.csv', 2);
 
 
 
@@ -167,7 +167,7 @@ const puppeteerFunction = async () => {
     console.log("INSTANCE " +currentId + ": " + "Le proxy choisi : ", proxy+':'+port+':'+user+':'+pass);
 
     // Lancement du navigateur en mode headless (sans interface graphique) et avec le proxy
-    const browser = await puppeteer.launch({ headless: "new",args: [`--proxy-server=${proxy+':'+port}`]});
+    const browser = await puppeteer.launch({ headless: false,args: [`--proxy-server=${proxy+':'+port}`]});
     console.log ("INSTANCE " +currentId + ": " + "Lancement du navigateur");
 
     // Création d'un nouvel onglet pour récuperer l'adresse IP
@@ -338,9 +338,11 @@ const puppeteerFunction = async () => {
     if (
       error.message.toLowerCase().includes('net::') ||
       error.message.includes('JSHandles can be evaluated only in the context they were created') ||
+      error.message.includes('Node is either not clickable or not an HTMLElement') ||
       (error instanceof SyntaxError && error.message.includes('Unexpected token G in JSON at position 4'))
     ) {
       console.error("INSTANCE " +currentId + ": " + 'An error occurred: ', error);
+      await updateOrderStatus(data.order_number, 'FAILED_PROCESSING');
       puppeteerFunction();
       return;
     }
@@ -349,6 +351,7 @@ const puppeteerFunction = async () => {
 
 
     console.log("INSTANCE " +currentId + ": " + "BLOC CATCH erreur : " + error);
+    console.log(error)
     data.order_status = 'FAILED_PROCESSING';
     await sendEmail(data);
     if (data.order_number !== null) {
@@ -358,12 +361,12 @@ const puppeteerFunction = async () => {
 };
 
 // Heures de début et de fin
-const startHour = 12;
-const endHour = 13;
+const startHour = 13;
+const endHour = 17;
 
-const commandSize = 300;
+const commandSize = 200;
 
-// Générer 50 heures aléatoires entre 8h et 18h
+// Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {
   let randomHours = [];
 
@@ -422,6 +425,6 @@ const scheduleExecutions = (hours) => {
   }
 }
 
-puppeteerFunction(); 
-//let randomHours = generateRandomHours();
-//scheduleExecutions(randomHours);
+//puppeteerFunction(); 
+let randomHours = generateRandomHours();
+scheduleExecutions(randomHours);
