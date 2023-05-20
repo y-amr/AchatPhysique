@@ -170,6 +170,7 @@ const puppeteerFunction = async () => {
     // Lancement du navigateur en mode headless (sans interface graphique) et avec le proxy
     const browser = await puppeteer.launch({
       headless: false,
+      executablePath: '/usr/bin/google-chrome-stable',
       args: [
           `--proxy-server=${proxy+':'+port}`,
           '--no-sandbox',
