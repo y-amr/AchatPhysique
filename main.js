@@ -172,9 +172,10 @@ const puppeteerFunction = async () => {
       headless: false,
       args: [
           `--proxy-server=${proxy+':'+port}`,
-          '--no-sandbox'
+          '--no-sandbox',
+          '--disable-dev-shm-usage'
       ]
-   });
+  });
   
     console.log ("INSTANCE " +currentId + ": " + "Lancement du navigateur");
 
