@@ -361,10 +361,10 @@ const puppeteerFunction = async () => {
 };
 
 // Heures de début et de fin
-const startHour = 21;
-const endHour = 23;
+const startHour = 02;
+const endHour = 04;
 
-const commandSize = 200;
+const commandSize = 1000;
 
 // Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {
