@@ -173,9 +173,12 @@ const puppeteerFunction = async () => {
       args: [
           `--proxy-server=${proxy+':'+port}`,
           '--no-sandbox',
-          '--disable-dev-shm-usage'
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas'
       ]
   });
+  
   
     console.log ("INSTANCE " +currentId + ": " + "Lancement du navigateur");
 
