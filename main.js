@@ -105,6 +105,7 @@ const getRandomCard = async (filePath) => {
 let idCounter = 1;
 let data = {};
 const puppeteerFunction = async () => {
+  
   const currentId = idCounter;
   idCounter += 1;
   console.log(`Starting execution of puppeteerFunction instance ${currentId}`);
@@ -167,7 +168,14 @@ const puppeteerFunction = async () => {
     console.log("INSTANCE " +currentId + ": " + "Le proxy choisi : ", proxy+':'+port+':'+user+':'+pass);
 
     // Lancement du navigateur en mode headless (sans interface graphique) et avec le proxy
-    const browser = await puppeteer.launch({ headless: false,args: [`--proxy-server=${proxy+':'+port}`]});
+    const browser = await puppeteer.launch({
+      headless: false,
+      args: [
+          `--proxy-server=${proxy+':'+port}`,
+          '--no-sandbox'
+      ]
+   });
+  
     console.log ("INSTANCE " +currentId + ": " + "Lancement du navigateur");
 
     // Création d'un nouvel onglet pour récuperer l'adresse IP
