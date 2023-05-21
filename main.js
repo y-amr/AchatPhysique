@@ -374,9 +374,9 @@ const puppeteerFunction = async () => {
 
 // Heures de début et de fin UTC 
 const startHour = 03;
-const endHour = 05;
+const endHour = 07;
 
-const commandSize = 3000;
+const commandSize = 30;
 
 // Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {
@@ -408,9 +408,7 @@ const scheduleExecutions = (hours) => {
   const nextHour = hours.find(hour => {
       const [h, m, s] = hour.split(':');
       const hourDate = new Date();
-      
       hourDate.setUTCHours(h, m, s);
-      console.log(`Heure de requête : ${hourDate.toISOString()}`);  
       return hourDate > now;
   });
 
