@@ -181,7 +181,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     // Création d'un nouvel onglet pour récuperer l'adresse IP
     const IPPage = await browser.newPage();
     await IPPage.authenticate({username:user, password:pass}); 
-    await IPPage.goto('http://httpbin.org/ip',{waitUntil: 'load', timeout: 0});
+    await IPPage.goto('https://httpbin.org/ip',{waitUntil: 'load', timeout: 0});
     const bodyHandle = await IPPage.$('body');
     const bodyText = await IPPage.evaluate(body => body.innerText, bodyHandle);
     const bodyObj = JSON.parse(bodyText);
@@ -218,6 +218,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     // Attendre que le bouton "Ajouter au panier" apparaisse
     await page.waitForSelector('.AddToCart');
     console.log ("INSTANCE " +currentId + ": " + "Page chargée");
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
     // Cliquer sur le bouton "Ajouter au panier"
     await page.click('.AddToCart');
     console.log ("INSTANCE " +currentId + ": " + "Ajout au panier");
@@ -381,7 +382,7 @@ const puppeteerFunction = async (retryCount = 0) => {
 const startHour = 11;
 const endHour = 15;
 
-const commandSize = 4000;
+const commandSize = 60;
 
 // Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {
