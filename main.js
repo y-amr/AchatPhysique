@@ -169,7 +169,7 @@ const puppeteerFunction = async () => {
 
     // Lancement du navigateur en mode headless (sans interface graphique) et avec le proxy
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: "new",
       args: [
           `--proxy-server=${proxy+':'+port}`,
           '--no-sandbox',
