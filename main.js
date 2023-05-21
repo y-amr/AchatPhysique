@@ -373,9 +373,9 @@ const puppeteerFunction = async () => {
   }
 };
 
-// Heures de début et de fin
-const startHour = 04;
-const endHour = 06;
+// Heures de début et de fin UTC 
+const startHour = 03;
+const endHour = 05;
 
 const commandSize = 300;
 
@@ -389,35 +389,32 @@ const generateRandomHours = () => {
       let randomSecond = Math.floor(Math.random() * 60);
 
       let randomTime = new Date();
-      randomTime.setHours(randomHour, randomMinute, randomSecond);
+      randomTime.setUTCHours(randomHour, randomMinute, randomSecond);
 
-      // Assurer que chaque heure est unique
       if (!randomHours.find(hour => hour.getTime() === randomTime.getTime())) {
           randomHours.push(randomTime);
       }
   }
 
-  // Trier les heures en ordre croissant
   randomHours.sort((a, b) => a.getTime() - b.getTime());
 
-  // Convertir les objets Date en chaînes de caractères
-  randomHours = randomHours.map(hour => `${hour.getHours()}:${hour.getMinutes()}:${hour.getSeconds()}`);
+  randomHours = randomHours.map(hour => `${hour.getUTCHours()}:${hour.getUTCMinutes()}:${hour.getUTCSeconds()}`);
   console.log(randomHours);
   return randomHours;
 }
-const scheduleExecutions = (hours) => {
-  // Obtenir l'heure actuelle
-  const now = new Date();
 
-  // Trouver la prochaine heure dans le tableau qui est plus tard que l'heure actuelle
+const scheduleExecutions = (hours) => {
+  const now = new Date();
+  console.log (`Heure actuelle : ${now.toISOString()}`);
   const nextHour = hours.find(hour => {
       const [h, m, s] = hour.split(':');
       const hourDate = new Date();
-      hourDate.setHours(h, m, s);
+      
+      hourDate.setUTCHours(h, m, s);
+      console.log(`Heure de requête : ${hourDate.toISOString()}`);  
       return hourDate > now;
   });
 
-  // Si une telle heure existe, l'afficher et planifier l'exécution de la fonction
   if (nextHour) {
       console.log(`Prochaine heure de requête : ${nextHour}`);
 
@@ -438,6 +435,5 @@ const scheduleExecutions = (hours) => {
   }
 }
 
-//puppeteerFunction(); 
 let randomHours = generateRandomHours();
 scheduleExecutions(randomHours);
