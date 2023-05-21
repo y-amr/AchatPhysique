@@ -170,7 +170,6 @@ const puppeteerFunction = async () => {
     // Lancement du navigateur en mode headless (sans interface graphique) et avec le proxy
     const browser = await puppeteer.launch({
       headless: false,
-      executablePath: '/usr/bin/chromium-browser',
       args: [
           `--proxy-server=${proxy+':'+port}`,
           '--no-sandbox',
@@ -377,7 +376,7 @@ const puppeteerFunction = async () => {
 const startHour = 03;
 const endHour = 05;
 
-const commandSize = 300;
+const commandSize = 3000;
 
 // Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {

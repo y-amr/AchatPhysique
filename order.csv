@@ -1,2 +1,9 @@
 ORDER_NUMBER,DATE,TIME,EMAIL,COUNTRY,FIRST_NAME,LAST_NAME,ADDRESS,CITY,ZIP,PHONE,ID_CARD,STATUS,NUMBER_PRODUCT
 1,2023-5-13,14:33:58,yanisamraoui66@gmail.fr,France,yanis,amraoui,47 rue jean jaures,Saint-Denis,93200,0665050816,1,COMPLETED,1
+2,2023-5-21,4:33:58,Maureen.Dupuis37@yahoo.fr,France,Jeannel,Andre,2827 Leroy de l'Odéon,New Hélène,75006,0620036596,2,FAILED_PROCESSING,
+3,2023-5-21,4:33:59,Mose.Philippe35@yahoo.fr,France,Girart,Morin,459 Maillard Delesseux,Lake Anatoleville,75088,0685658365,5,FAILED_PROCESSING,
+4,2023-5-21,4:34:23,Athnas71@hotmail.fr,France,Raymonde,Philippe,244 Aleth Monsieur-le-Prince,Lake Eugènetown,75015,0652596491,2,FAILED_PROCESSING,
+5,2023-5-21,4:34:37,Thophraste37@yahoo.fr,France,Yvette,Giraud,302 Tatiana Mouffetard,West Achaire,75022,0669678995,2,pending,
+6,2023-5-21,4:34:38,Laurane42@hotmail.fr,France,Sixtine,Martinez,5602 Baron de la Ferronnerie,North Blancheberg,75059,0601130870,4,pending,
+6,2023-5-21,4:34:38,Laurane42@hotmail.fr,France,Sixtine,Martinez,5602 Baron de la Ferronnerie,North Blancheberg,75059,0601130870,4,pending,
+6,2023-5-21,4:34:38,Laurane42@hotmail.fr,France,Sixtine,Martinez,5602 Baron de la Ferronnerie,North Blancheberg,75059,0601130870,4,pending,
