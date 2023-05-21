@@ -104,8 +104,8 @@ const getRandomCard = async (filePath) => {
 
 let idCounter = 1;
 let data = {};
-const puppeteerFunction = async () => {
-  
+const puppeteerFunction = async (retryCount = 0) => {
+  console.log (retryCount);
   const currentId = idCounter;
   idCounter += 1;
   console.log(`Starting execution of puppeteerFunction instance ${currentId}`);
@@ -171,11 +171,7 @@ const puppeteerFunction = async () => {
     const browser = await puppeteer.launch({
       headless: "new",
       args: [
-          `--proxy-server=${proxy+':'+port}`,
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas'
+          `--proxy-server=${proxy+':'+port}`
       ]
   });
   
@@ -185,7 +181,7 @@ const puppeteerFunction = async () => {
     // Création d'un nouvel onglet pour récuperer l'adresse IP
     const IPPage = await browser.newPage();
     await IPPage.authenticate({username:user, password:pass}); 
-    await IPPage.goto('https://httpbin.org/ip',{waitUntil: 'load', timeout: 0});
+    await IPPage.goto('http://httpbin.org/ip',{waitUntil: 'load', timeout: 0});
     const bodyHandle = await IPPage.$('body');
     const bodyText = await IPPage.evaluate(body => body.innerText, bodyHandle);
     const bodyObj = JSON.parse(bodyText);
@@ -355,7 +351,16 @@ const puppeteerFunction = async () => {
     ) {
       console.error("INSTANCE " +currentId + ": " + 'An error occurred: ', error);
       await updateOrderStatus(data.order_number, 'FAILED_PROCESSING');
-      puppeteerFunction();
+      if (retryCount > 2) {
+        console.log("INSTANCE " +currentId + ": " + 'ANNULATION DU RETRY');
+      } else if (retryCount > 0 ) {
+        console.log("INSTANCE " +currentId + ": " + 'RETRY');
+        puppeteerFunction( retryCount + 1);
+      } else {
+        console.log("INSTANCE " +currentId + ": " + ' PREMIER RETRY');
+        puppeteerFunction(1);
+      }
+      
       return;
     }
     
@@ -373,10 +378,10 @@ const puppeteerFunction = async () => {
 };
 
 // Heures de début et de fin UTC 
-const startHour = 03;
-const endHour = 07;
+const startHour = 11;
+const endHour = 15;
 
-const commandSize = 30;
+const commandSize = 4000;
 
 // Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {
@@ -434,3 +439,4 @@ const scheduleExecutions = (hours) => {
 
 let randomHours = generateRandomHours();
 scheduleExecutions(randomHours);
+//puppeteerFunction();
