@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Commande terminée </title>
+    <title>Commande terminée</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,9 +27,17 @@
 </head>
 <body>
     <div class="header">
-        <h1>La commande numéro {{order_number}} c'est terminée avec le status : {{order_status}} </h1>
+        <h1>La commande numéro {{order_number}} c'est terminée avec le status : {{order_status}}</h1>
     </div>
-    <p> NOMBRE DE CD COMMANDER AU TOTAL : {{total_product}}</p>
+    <p>NOMBRE D'ARTICLE COMMANDER AU TOTAL AVANT LA COMMANDE : {{total_product}}</p>
+
+    <p>Panier de la commande :</p>
+    <ul>
+        <li>Order Number Pack (2 CD) : {{order_number_pack}}</li>
+        <li>Order Number Exclusive (1 CD) : {{order_number_exclusive}}</li>
+        <li>Order Number Standard (1 CD) : {{order_number_standard}}</li>
+    </ul>
+    
     <p>Les détails sont les suivants :</p>
     <ul>
         <li>Nom : {{FIRST_NAME}}</li>

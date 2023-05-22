@@ -3,8 +3,6 @@ const fs = require('fs');
 const path = require('path');
 
 const initTransporter = async () => {
-  let testAccount = await nodemailer.createTestAccount();
-
   return nodemailer.createTransport({
     service: 'gmail', // Utilisation de Gmail
     auth: {
@@ -58,4 +56,39 @@ const sendEmail = async (data) => {
   });
 };
 
-module.exports = sendEmail;
+const sendCalendarEmail = async ( randomHours) => {
+  try {
+    // Créez un transporteur SMTP avec les informations de votre compte de messagerie
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Utilisation de Gmail
+      auth: {
+        user: 'yanisamraoui.pro@gmail.com', // Remplacez par votre adresse email Gmail
+        pass: 'exmfmlzorvioyctt', // Remplacez par votre mot de passe d'application
+    },
+    });
+
+    // Construisez le contenu du courrier électronique avec le calendrier des horaires
+    let htmlContent = `<h1>Calendrier des horaires</h1>`;
+    htmlContent += `<ul>`;
+    randomHours.forEach((hour) => {
+      htmlContent += `<li>${hour}</li>`;
+    });
+    htmlContent += `</ul>`;
+
+    // Configurez les options du courrier électronique
+    const mailOptions = {
+      from: 'bot@gmail.com',
+      to: "yanisamraoui66@gmail.com",
+      subject: "Calendrier des horaires d'envoie de commande",
+      html: htmlContent,
+    };
+
+    // Envoyez l'e-mail
+    const info = await transporter.sendMail(mailOptions);
+    console.log('E-mail envoyé :', info.messageId);
+  } catch (error) {
+    console.error('Une erreur s\'est produite lors de l\'envoi de l\'e-mail :', error);
+  }
+};
+
+module.exports = {sendEmail, sendCalendarEmail};

@@ -44,8 +44,8 @@ async function calculateSum() {
   });
 }
 
-const sendEmail = require('./mail.js');
-const {create_record,getNumberOfOrders,updateOrderStatus} = require('./order.js');
+const {sendEmail,sendCalendarEmail} = require('./mail.js');
+const {create_record,getNumberOfOrders,updateOrderStatus,updateOrderContent} = require('./order.js');
 
 const deleteLine = async (originalFile, lineNumber) => {
   const rl = readline.createInterface({
@@ -125,7 +125,6 @@ const puppeteerFunction = async (retryCount = 0) => {
       PHONE
     } = data;
     console.log("INSTANCE " +currentId + ": " + "Informations de l'utilisateur : ", data);
-    await deleteLine('user_info.csv', 2);
 
 
 
@@ -205,41 +204,89 @@ const puppeteerFunction = async (retryCount = 0) => {
     //console.log('Popup PAYS fermée');
 
     // Attendre que la popup s'affiche
-    //await page.waitForSelector('.privy-popup-container');
-
-   //console.log('Popup Cookies affichée');
-    
+    await page.waitForSelector('.privy-popup-content-wrap');
+    console.log('Popup Newlester affichée');
+    // Attendre que la popup soit visible
+    await page.waitForFunction(() => {
+      const popup = document.querySelector('.privy-popup-content-wrap');
+      return popup && window.getComputedStyle(popup).getPropertyValue('display') !== 'none';
+    });
+    console.log('Popup Newlester visible');
     // Fermer la popup
-    //onst closeButton = await page.$('.privy-close');
+    await page.click('.privy-dismiss-content');
 
     //console.log('Popup Cookies fermée');
 
-
+    await page.waitForTimeout(10000); // Le temps d'attente est en millisecondes
     // Attendre que le bouton "Ajouter au panier" apparaisse
     await page.waitForSelector('.AddToCart');
     console.log ("INSTANCE " +currentId + ": " + "Page chargée");
-    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
+    await page.waitForTimeout(10000); // Le temps d'attente est en millisecondes
     // Cliquer sur le bouton "Ajouter au panier"
     await page.click('.AddToCart');
     console.log ("INSTANCE " +currentId + ": " + "Ajout au panier");
     // Faire une pause de 10 secondes
     await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
 
-    let order_number_product = 0;
-    let randomNum = Math.floor(Math.random() * 3) + 3; // Génère un nombre aléatoire entre 3 et 5
+    let order_number_product = 1;
+    let randomNum = Math.round(Math.random()); // Génère un nombre aléatoire entre 0 et 1
     await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
     for(let i=0; i<randomNum; i++){
       await page.click('.ajaxcart__qty-adjust.ajaxcart__qty-adjust--bundle.ajaxcart__qty--plus.icon-fallback-text');
       order_number_product++;
       await page.waitForTimeout(1000); // attend une seconde avant le prochain clic
     }
-    console.log("INSTANCE " +currentId + ": " + `Nombre d'articles ajoutés au panier: ${order_number_product}`);
+    console.log("INSTANCE " +currentId + ": " + `Nombre de PACK ajoutés au panier: ${order_number_product}`);
     data.order_number_product = order_number_product;
+    
+    data.order_number_pack = order_number_product;
 
+    console.log( "INSTANCE " +currentId + ": " + "Nombre de PACK ajoutés au panier NUMBER_PACK: ", data.order_number_pack);
 
-  
     // Faire une pause de 10 secondes
     await page.waitForTimeout(10000); // Le temps d'attente est en millisecondes
+
+    data.order_number_exclusive = 0;
+    data.order_number_standard = 0;
+    // Génère un nombre aléatoire entre 0 et 1
+    let randomNumber = Math.random();
+    // Aléatoirement acheter le CD Rêves II Rue Edition Exclusive ou Standard
+    if (randomNumber < 0.5) {
+      await page.goto('https://iktlf.shop/products/cd-reves-2-rue-edition-exclusive', {waitUntil: 'load', timeout: 0});
+      await page.authenticate({username: user, password: pass});
+      // Attendre que le bouton "Ajouter au panier" apparaisse
+      await page.waitForSelector('.AddToCart');
+      console.log ("INSTANCE " +currentId + ": " + "Page chargée");
+      await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
+      // Cliquer sur le bouton "Ajouter au panier"
+      await page.click('.AddToCart');
+      console.log ("INSTANCE " +currentId + ": " + "Ajout au panier");
+
+      data.order_number_exclusive = 1;
+      data.order_number_product = data.order_number_product + 1;
+
+      // Faire une pause de 10 secondes
+      await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
+
+    } else {
+      await page.goto('https://iktlf.shop/products/cd-reves-ii-rue-edition-standard', {waitUntil: 'load', timeout: 0});
+      await page.authenticate({username: user, password: pass});
+      // Attendre que le bouton "Ajouter au panier" apparaisse
+      await page.waitForSelector('.AddToCart');
+      console.log ("INSTANCE " +currentId + ": " + "Page chargée");
+      await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
+      // Cliquer sur le bouton "Ajouter au panier"
+      await page.click('.AddToCart');
+      console.log ("INSTANCE " +currentId + ": " + "Ajout au panier");
+
+      data.order_number_product = data.order_number_product + 1;
+      data.order_number_standard = 1;
+      
+      // Faire une pause de 10 secondes
+      await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
+    }
+
+    updateOrderContent(new_order_number,data.order_number_pack, data.order_number_exclusive, data.order_number_standard);
 
     await Promise.all([
       page.waitForNavigation(),
@@ -247,7 +294,9 @@ const puppeteerFunction = async (retryCount = 0) => {
       page.authenticate({username:user, password:pass})
     ]);
     console.log ("INSTANCE " +currentId + ": " + "Page panier chargée");
-      
+    
+    await page.screenshot({ path: `Image/panier_${new_order_number}.png` });
+
     // Cocher la case "J'ai lu et j'accepte les Conditions Générales de Vente"
     const generalConditionsInput = await page.$('#general-condtions-input');
     if (generalConditionsInput) {
@@ -258,6 +307,8 @@ const puppeteerFunction = async (retryCount = 0) => {
     await page.waitForSelector('#general-condtions-input:checked');
     console.log("INSTANCE " +currentId + ": " + 'Conditions Générales de Vente cochées');
 
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
+    await page.screenshot({ path: `Image/panier_${new_order_number}.png` });
 
     // Trouver et cliquer sur le bouton "Procéder au paiement"
     const checkoutButton = await page.$('input.checkout-cart');
@@ -274,7 +325,11 @@ const puppeteerFunction = async (retryCount = 0) => {
     await page.type('#checkout_shipping_address_address1', ADDRESS);
     await page.type('#checkout_shipping_address_city', CITY);
     await page.type('#checkout_shipping_address_zip', ZIP);
-    await page.type('#checkout_shipping_address_phone', PHONE);
+    let formattedPhoneNumber = PHONE.slice(0, 2) + " " + PHONE.slice(2, 4) + " " + PHONE.slice(4, 6) + " " + PHONE.slice(6, 8) + " " + PHONE.slice(8, 10);
+
+    await page.type('#checkout_shipping_address_phone', formattedPhoneNumber);
+
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
 
     console.log("INSTANCE " +currentId + ": " + 'Informations de livraison renseignées');
 
@@ -329,14 +384,18 @@ const puppeteerFunction = async (retryCount = 0) => {
       data.new_total_product = data.order_number_product + data.total_product;
       await sendEmail(data);
       await updateOrderStatus(new_order_number, 'COMPLETED');
+      await deleteLine('user_info.csv', 2);
+      await page.screenshot({ path: `Image/Paiment_${new_order_number}.png` });
     } catch (error) {
       const formElement = await page.$('#retryPaymentForm');
       if (formElement !== null) {
         console.log("INSTANCE " +currentId + ": " + "La commande est en erreur de paiement");
         data.order_status = 'FAILED_PAIEMENT';
+        await page.screenshot({ path: `Image/Error_Paiment_${new_order_number}.png` });
         await updateOrderStatus(new_order_number, 'FAILED_PAIEMENT');
       }else{
         console.log("INSTANCE " +currentId + ": " + "La commande n'a pas été passée dans les 100 secondes");
+        await page.screenshot({ path: `Image/Error_100s_${new_order_number}.png` });
         data.order_status = 'FAILED';
         await updateOrderStatus(new_order_number, 'FAILED');
       }
@@ -379,10 +438,10 @@ const puppeteerFunction = async (retryCount = 0) => {
 };
 
 // Heures de début et de fin UTC 
-const startHour = 11;
-const endHour = 15;
+const startHour = 10;
+const endHour = 22;
 
-const commandSize = 60;
+const commandSize = 9;
 
 // Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {
@@ -405,6 +464,7 @@ const generateRandomHours = () => {
 
   randomHours = randomHours.map(hour => `${hour.getUTCHours()}:${hour.getUTCMinutes()}:${hour.getUTCSeconds()}`);
   console.log(randomHours);
+  sendCalendarEmail(randomHours);
   return randomHours;
 }
 
