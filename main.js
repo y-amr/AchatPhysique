@@ -204,6 +204,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     //console.log('Popup PAYS fermée');
 
     // Attendre que la popup s'affiche
+    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
     await page.waitForSelector('.privy-popup-content-wrap');
     console.log('Popup Newlester affichée');
     // Attendre que la popup soit visible
@@ -230,7 +231,7 @@ const puppeteerFunction = async (retryCount = 0) => {
 
     let order_number_product = 1;
     let randomNum = Math.round(Math.random()); // Génère un nombre aléatoire entre 0 et 1
-    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
+    await page.waitForTimeout(10000); // Le temps d'attente est en millisecondes
     for(let i=0; i<randomNum; i++){
       await page.click('.ajaxcart__qty-adjust.ajaxcart__qty-adjust--bundle.ajaxcart__qty--plus.icon-fallback-text');
       order_number_product++;
@@ -295,7 +296,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     ]);
     console.log ("INSTANCE " +currentId + ": " + "Page panier chargée");
     
-    await page.screenshot({ path: `Image/panier_${new_order_number}.png` });
+    await page.screenshot({ path: `Image/panier_view_${new_order_number}.png` });
 
     // Cocher la case "J'ai lu et j'accepte les Conditions Générales de Vente"
     const generalConditionsInput = await page.$('#general-condtions-input');
@@ -407,11 +408,15 @@ const puppeteerFunction = async (retryCount = 0) => {
       error.message.toLowerCase().includes('net::') ||
       error.message.includes('JSHandles can be evaluated only in the context they were created') ||
       error.message.includes('Node is either not clickable or not an HTMLElement') ||
+      error.message.includes('Waiting for selector') ||
+      error.message.includes('Timed out') ||
+      error.message.includes('TypeError') ||
+      error.message.includes('No element found') ||
       (error instanceof SyntaxError && error.message.includes('Unexpected token G in JSON at position 4'))
     ) {
       console.error("INSTANCE " +currentId + ": " + 'An error occurred: ', error);
       await updateOrderStatus(data.order_number, 'FAILED_PROCESSING');
-      if (retryCount > 2) {
+      if (retryCount > 5) {
         console.log("INSTANCE " +currentId + ": " + 'ANNULATION DU RETRY');
       } else if (retryCount > 0 ) {
         console.log("INSTANCE " +currentId + ": " + 'RETRY');
@@ -438,10 +443,11 @@ const puppeteerFunction = async (retryCount = 0) => {
 };
 
 // Heures de début et de fin UTC 
-const startHour = 10;
-const endHour = 22;
+const startHour = 21;
+const endHour = 23;
 
-const commandSize = 9;
+const commandSize = 4;
+
 
 // Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {
