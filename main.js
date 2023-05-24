@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const csv = require('csv-parser');
 const readline = require('readline');
+const Papa = require('papaparse');
 
 const cron = require('node-cron');
 
@@ -42,6 +43,25 @@ async function calculateSum() {
       })
       .on('error', reject);
   });
+}
+
+async function filterCSV(filePath) {
+  // Read the CSV file
+  const file = await fs.readFile(filePath, 'utf8');
+
+  // Parse the CSV
+  let data = Papa.parse(file, { header: true });
+
+  // Filter the data, keeping only rows with STATUS 'COMPLETED' or 'PENDING'
+  data.data = data.data.filter(row => row.STATUS === 'COMPLETED' || row.STATUS === 'PENDING');
+
+  // Convert the filtered data back into CSV format
+  let csv = Papa.unparse(data);
+
+  // Write the filtered CSV data back to the file
+  await fs.writeFile(filePath, csv);
+
+  console.log(`Filtered data written back to ${filePath}`);
 }
 
 const {sendEmail,sendCalendarEmail} = require('./mail.js');
@@ -443,10 +463,10 @@ const puppeteerFunction = async (retryCount = 0) => {
 };
 
 // Heures de début et de fin UTC 
-const startHour = 21;
-const endHour = 23;
+const startHour = 08;
+const endHour = 13;
 
-const commandSize = 4;
+const commandSize = 8;
 
 
 // Générer 200 heures aléatoires entre 13h et 17h
@@ -506,4 +526,4 @@ const scheduleExecutions = (hours) => {
 
 let randomHours = generateRandomHours();
 scheduleExecutions(randomHours);
-//puppeteerFunction();
+puppeteerFunction();
