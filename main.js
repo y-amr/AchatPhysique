@@ -417,7 +417,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     ) {
       console.error("INSTANCE " +currentId + ": " + 'An error occurred: ', error);
       await updateOrderStatus(data.order_number, 'FAILED_PROCESSING');
-      if (retryCount > 5) {
+      if (retryCount > 10) {
         console.log("INSTANCE " +currentId + ": " + 'ANNULATION DU RETRY');
       } else if (retryCount > 0 ) {
         console.log("INSTANCE " +currentId + ": " + 'RETRY');
@@ -444,8 +444,8 @@ const puppeteerFunction = async (retryCount = 0) => {
 };
 
 // Heures de début et de fin UTC 
-const startHour = 08;
-const endHour = 13;
+const startHour = 14;
+const endHour = 20;
 
 const commandSize = 8;
 
@@ -505,6 +505,6 @@ const scheduleExecutions = (hours) => {
   }
 }
 
-//let randomHours = generateRandomHours();
-//scheduleExecutions(randomHours);
-puppeteerFunction();
+let randomHours = generateRandomHours();
+scheduleExecutions(randomHours);
+//puppeteerFunction();
