@@ -297,7 +297,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     ]);
     console.log ("INSTANCE " +currentId + ": " + "Page panier chargée");
     
-    await page.screenshot({ path: `Image/panier_view_${new_order_number}.png` });
+    //await page.screenshot({ path: `Image/panier_view_${new_order_number}.png` });
 
     // Cocher la case "J'ai lu et j'accepte les Conditions Générales de Vente"
     const generalConditionsInput = await page.$('#general-condtions-input');
@@ -310,7 +310,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     console.log("INSTANCE " +currentId + ": " + 'Conditions Générales de Vente cochées');
 
     await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
-    await page.screenshot({ path: `Image/panier_${new_order_number}.png` });
+    //await page.screenshot({ path: `Image/panier_${new_order_number}.png` });
 
     // Trouver et cliquer sur le bouton "Procéder au paiement"
     const checkoutButton = await page.$('input.checkout-cart');
@@ -387,7 +387,7 @@ const puppeteerFunction = async (retryCount = 0) => {
       await sendEmail(data);
       await updateOrderStatus(new_order_number, 'COMPLETED');
       await deleteLine('user_info.csv', 2);
-      await page.screenshot({ path: `Image/Paiment_${new_order_number}.png` });
+      //await page.screenshot({ path: `Image/Paiment_${new_order_number}.png` });
     } catch (error) {
       const formElement = await page.$('#retryPaymentForm');
       if (formElement !== null) {
@@ -413,7 +413,9 @@ const puppeteerFunction = async (retryCount = 0) => {
       error.message.includes('Timed out') ||
       error.message.includes('TypeError') ||
       error.message.includes('No element found') ||
-      (error instanceof SyntaxError && error.message.includes('Unexpected token G in JSON at position 4'))
+      error.message.includes('Cannot read properties of undefined') ||
+      error.message.includes('Cannot extract value when objectId') ||
+      (error instanceof SyntaxError && error.message.includes('Unexpected token'))
     ) {
       console.error("INSTANCE " +currentId + ": " + 'An error occurred: ', error);
       await updateOrderStatus(data.order_number, 'FAILED_PROCESSING');
@@ -426,13 +428,10 @@ const puppeteerFunction = async (retryCount = 0) => {
         console.log("INSTANCE " +currentId + ": " + ' PREMIER RETRY');
         puppeteerFunction(1);
       }
-      
       return;
     }
     
     console.log("INSTANCE " +currentId + ": " + 'Suppression de la ligne 2 du fichier user_info.csv');
-
-
     console.log("INSTANCE " +currentId + ": " + "BLOC CATCH erreur : " + error);
     console.log(error)
     data.order_status = 'FAILED_PROCESSING';
@@ -444,10 +443,10 @@ const puppeteerFunction = async (retryCount = 0) => {
 };
 
 // Heures de début et de fin UTC 
-const startHour = 14;
+const startHour = 04;
 const endHour = 20;
 
-const commandSize = 8;
+const commandSize = 15;
 
 
 // Générer 200 heures aléatoires entre 13h et 17h

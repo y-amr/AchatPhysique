@@ -11,18 +11,16 @@ ORDER_NUMBER,DATE,TIME,EMAIL,COUNTRY,FIRST_NAME,LAST_NAME,ADDRESS,CITY,ZIP,PHONE
 10,2023-5-22,21:31:58,ali.zerouali@gmail.com,France,Ali,Zerouali,8 Rue du Clos Vougeot,Créteil,94000,06 55 14 20 90,5,COMPLETED,2,1,0
 11,2023-5-22,22:9:48,magou.ebenezer@gmail.com,France,Magou,Ebenezer,16 rue Salvador Allende,Stains,93240,0655142091,3,COMPLETED,1,0,1
 12,2023-5-23,12:25:2,ryad.mebarki@gmail.com,France,Ryad,Mebarki,36 rue Jean Moulin,Garges les Gonesse,95140,0654321098,3,COMPLETED,1,0,1
-15,2023-5-23,13:39:26,magou1234@gmail.com,France,Magou,Ebenezer,16 rue Salvador Allende,Stains,93240,0678901234,2,COMPLETED,2,1,0
-20,2023-5-23,15:48:53,ismael321@gmail.com,France,Ismael,Djebbar,6 rue de Bosnier,Le Mesnil Amelot,77990,0678901234,1,FAILED_PROCESSING,1,1,0
-23,2023-5-23,20:8:56,mendesjb5678@gmail.com,France,Mendes,JB,5 avenue Albert 1er,Eaubonne,95600,0654321098,5,COMPLETED,1,1,0
-19,2023-5-23,22:5:37,hakimz6789@gmail.com,France,Hakim,Zerouali,1 allee de la cote d'or,Créteil,94000,0612345678,2,COMPLETED,2,0,1
+13,2023-5-23,13:39:26,magou1234@gmail.com,France,Magou,Ebenezer,16 rue Salvador Allende,Stains,93240,0678901234,2,COMPLETED,2,1,0
+14,2023-5-23,15:48:53,ismael321@gmail.com,France,Ismael,Djebbar,6 rue de Bosnier,Le Mesnil Amelot,77990,0678901234,1,FAILED_PROCESSING,1,1,0
+15,2023-5-23,20:8:56,mendesjb5678@gmail.com,France,Mendes,JB,5 avenue Albert 1er,Eaubonne,95600,0654321098,5,COMPLETED,1,1,0
+16,2023-5-23,22:5:37,hakimz6789@gmail.com,France,Hakim,Zerouali,1 allee de la cote d'or,Créteil,94000,0612345678,2,COMPLETED,2,0,1
 17,2023-5-23,22:13:15,michael5678@gmail.com,France,Michael,Bedia,65 boulevard Hippolyte Marques,Ivry Sur Seine,94200,0612345678,4,COMPLETED,1,1,0
-19,2023-5-23,21:50:1,alizer123@gmail.com,France,Ali,Zerouali,8 Rue du Clos Vougeot,Créteil,94000,0654321098,1,COMPLETED,2,0,1
-22,2023-5-23,22:1:30,linda1234@gmail.com,France,Linda,Ouchene,2 rue Paul Verlaine,La Courneuve,93120,0612345678,5,FAILED_PROCESSING,1,1,0
-20,2023-5-24,9:34:57,mendesjb5678@example.com,France,Mendes,JB,5 avenue Albert 1er,Eaubonne,95600,0654321098,4,FAILED_PROCESSING,,,
-21,2023-5-24,8:42:52,mendesjb5678@example.com,France,Mendes,JB,5 avenue Albert 1er,Eaubonne,95600,0654321098,4,COMPLETED,2,0,1
-23,2023-5-24,10:33:20,hakimz6789@example.com,France,Hakim,Zerouali,1 allee de la cote d'or,Créteil,94000,0612345678,5,COMPLETED,1,1,0
-30,2023-5-24,12:34:20,sabrina.djebbar@example.com,France,Sabrina,Djebbar,9 rue des Doucettes,Garges les Gonesses,95140,0678904567,1,COMPLETED,2,1,0
-32,2023-5-24,12:41:53,ryad.mebarki@example.com,France,Ryad,Mebarki,36 rue Jean Moulin,Garges les Gonesse,95140,0654321098,5,COMPLETED,1,0,1
-36,2023-5-24,12:54:34,magou1234@example.com,France,Magou,Ebenezer,16 rue Salvador Allende,Stains,93240,0678901234,4,COMPLETED,2,0,1
-37,2023-5-24,13:15:10,areski5678@example.com,France,Areski,Djebbar,5 rue du Président Georges Pompidou,Dugny,93440,0678901234,4,COMPLETED,1,0,1
-39,2023-5-24,14:0:13,ismael321@example.com,France,Ismael,Djebbar,6 rue de Bosnier,Le Mesnil Amelot,77990,0678901234,1,COMPLETED,2,0,1
+18,2023-5-23,21:50:1,alizer123@gmail.com,France,Ali,Zerouali,8 Rue du Clos Vougeot,Créteil,94000,0654321098,1,COMPLETED,2,0,1
+19,2023-5-24,8:42:52,mendesjb5678@example.com,France,Mendes,JB,5 avenue Albert 1er,Eaubonne,95600,0654321098,4,COMPLETED,2,0,1
+20,2023-5-24,10:33:20,hakimz6789@example.com,France,Hakim,Zerouali,1 allee de la cote d'or,Créteil,94000,0612345678,5,COMPLETED,1,1,0
+21,2023-5-24,14:0:13,ismael321@example.com,France,Ismael,Djebbar,6 rue de Bosnier,Le Mesnil Amelot,77990,0678901234,1,COMPLETED,2,1,0
+22,2023-5-24,16:15:48,linda1234@gmail.com,France,Linda,Ouchene,2 rue Paul Verlaine,La Courneuve,93120,0612345678,1,COMPLETED,1,0,127
+23,2023-5-24,20:52:57,alizer123@gmail.com,France,Ali,Zerouali,8 Rue du Clos Vougeot,Créteil,94000,0654321098,4,COMPLETED,1,1,0
+24,2023-5-24,20:55:34,alizer123@gmail.com,France,Ali,Zerouali,8 Rue du Clos Vougeot,Créteil,94000,0654321098,1,COMPLETED,2,1,0
+25,2023-5-24,21:12:34,hakimz6789@outlook.com,France,Hakim,Zerouali,1 allee de la cote d'or,Créteil,94000,0678321546,4,COMPLETED,2,1,0
