@@ -169,7 +169,7 @@ const puppeteerFunction = async (retryCount = 0) => {
 
     // Lancement du navigateur en mode headless (sans interface graphique) et avec le proxy
     const browser = await puppeteer.launch({
-      headless: "new",
+      headless: false,
       args: [
           `--proxy-server=${proxy+':'+port}`
       ]
@@ -205,7 +205,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     //console.log('Popup PAYS fermée');
 
     // Attendre que la popup s'affiche
-    await page.waitForTimeout(50000); // Le temps d'attente est en millisecondes
+    await page.waitForTimeout(30000); // Le temps d'attente est en millisecondes
     await page.waitForSelector('.privy-popup-content-wrap');
     console.log('Popup Newlester affichée');
     // Attendre que la popup soit visible
@@ -300,7 +300,6 @@ const puppeteerFunction = async (retryCount = 0) => {
       page.goto('https://iktlf.shop/cart', { timeout: 0 }),
       page.authenticate({username:user, password:pass})
     ]);
-
     console.log ("INSTANCE " +currentId + ": " + "Page panier chargée");
     
     //await page.screenshot({ path: `Image/panier_view_${new_order_number}.png` });
@@ -412,7 +411,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     }
     await browser.close();
   } catch (error) {
-    /*if (
+    if (
       error.message.toLowerCase().includes('net::') ||
       error.message.includes('JSHandles can be evaluated only in the context they were created') ||
       error.message.includes('Node is either not clickable or not an HTMLElement') ||
@@ -424,20 +423,21 @@ const puppeteerFunction = async (retryCount = 0) => {
       error.message.includes('Cannot extract value when objectId') ||
       (error instanceof SyntaxError && error.message.includes('Unexpected token'))
     ) {
-      */
       console.error("INSTANCE " +currentId + ": " + 'An error occurred: ', error);
       await updateOrderStatus(data.order_number, 'FAILED_PROCESSING');
-      if (retryCount > 15) {
+      if (retryCount > 10) {
         console.log("INSTANCE " +currentId + ": " + 'ANNULATION DU RETRY');
       } else if (retryCount > 0 ) {
-        console.log("INSTANCE " +currentId + ": " + 'RETRY ' + retryCount + ' EN COURS');
+        console.log("INSTANCE " +currentId + ": " + 'RETRY');
         puppeteerFunction( retryCount + 1);
       } else {
         console.log("INSTANCE " +currentId + ": " + ' PREMIER RETRY');
         puppeteerFunction(1);
       }
-    //} 
-
+      return;
+    }
+    
+    console.log("INSTANCE " +currentId + ": " + 'Suppression de la ligne 2 du fichier user_info.csv');
     console.log("INSTANCE " +currentId + ": " + "BLOC CATCH erreur : " + error);
     console.log(error)
     data.order_status = 'FAILED_PROCESSING';
@@ -449,20 +449,20 @@ const puppeteerFunction = async (retryCount = 0) => {
 };
 
 // Heures de début et de fin UTC 
-const startHour = 07;
-const endHour = 11;
+const startHour = 18;
+const endHour = 23;
 
-const commandSize = 17;
+const commandSize = 6;
 
 
 // Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {
   let randomHours = [];
+
   while (randomHours.length < commandSize) {
       let randomHour = Math.floor(Math.random() * (endHour - startHour + 1)) + startHour;
       let randomMinute = Math.floor(Math.random() * 60);
       let randomSecond = Math.floor(Math.random() * 60);
-    
 
       let randomTime = new Date();
       randomTime.setUTCHours(randomHour, randomMinute, randomSecond);
@@ -488,7 +488,6 @@ const scheduleExecutions = (hours) => {
       const [h, m, s] = hour.split(':');
       const hourDate = new Date();
       hourDate.setUTCHours(h, m, s);
-      hourDate.setDate(30);
       return hourDate > now;
   });
 
@@ -512,6 +511,6 @@ const scheduleExecutions = (hours) => {
   }
 }
 
-let randomHours = generateRandomHours();
-scheduleExecutions(randomHours);
-//puppeteerFunction();
+//let randomHours = generateRandomHours();
+//scheduleExecutions(randomHours);
+puppeteerFunction();

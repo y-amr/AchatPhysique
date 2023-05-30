@@ -16,7 +16,9 @@ const getNumberOfOrders = () => new Promise((resolve, reject) => {
     .on('error', reject);
 });
 
-  
+
+
+
 const create_record = async (data, order_number) => {
   //console.log(data)
   const csvWriter = createCsvWriter({
@@ -41,9 +43,15 @@ const create_record = async (data, order_number) => {
     ],
     append: true // Si true, ajoute au fichier existant, sinon remplace le fichier
   });
+
+
+
   const now = new Date();
-  const date = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
-  const time = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+  now.setHours(now.getHours() + 2);
+  const date = `${now.getUTCFullYear()}-${now.getUTCMonth()+1}-${now.getUTCDate()}`;
+  const time = `${now.getUTCHours()}:${now.getUTCMinutes()}:${now.getUTCSeconds()}`;
+  console.log(`Date: ${date}, Time: ${time}`);
+  
 
   const record = {
     order_number: String(order_number),

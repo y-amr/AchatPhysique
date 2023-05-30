@@ -29,7 +29,7 @@ async function calculateSum() {
   return new Promise((resolve, reject) => {
     let sum = 0;
 
-    fs.createReadStream('order.csv')
+    fs.createReadStream('order_nahir.csv')
       .pipe(csv())
       .on('data', (row) => {
         if(row.STATUS === 'COMPLETED') {
@@ -112,7 +112,7 @@ const puppeteerFunction = async (retryCount = 0) => {
   console.log(`Starting execution of puppeteerFunction instance ${currentId}`);
 
   try {
-    data = await getLineFromCsv('user_info.csv', 1);
+    data = await getLineFromCsv('user_info_nahir.csv', 1);
 
     const {
       ID_USER,
@@ -169,10 +169,10 @@ const puppeteerFunction = async (retryCount = 0) => {
 
     // Lancement du navigateur en mode headless (sans interface graphique) et avec le proxy
     const browser = await puppeteer.launch({
-      headless: "new",
-      args: [
-          `--proxy-server=${proxy+':'+port}`
-      ]
+      headless: false,
+      //args: [
+      //    `--proxy-server=${proxy+':'+port}`
+      //]
   });
   
   
@@ -180,7 +180,7 @@ const puppeteerFunction = async (retryCount = 0) => {
 
     // Création d'un nouvel onglet pour récuperer l'adresse IP
     const IPPage = await browser.newPage();
-    await IPPage.authenticate({username:user, password:pass}); 
+    //await IPPage.authenticate({username:user, password:pass}); 
     await IPPage.goto('https://httpbin.org/ip',{waitUntil: 'load', timeout: 0});
     const bodyHandle = await IPPage.$('body');
     const bodyText = await IPPage.evaluate(body => body.innerText, bodyHandle);
@@ -194,8 +194,8 @@ const puppeteerFunction = async (retryCount = 0) => {
 
     const page = await browser.newPage();
     // Naviguer vers l'adresse https://iktlf.shop/cart
-    await page.goto('https://iktlf.shop/products/pack-reves-ii-rue', {waitUntil: 'load', timeout: 0});
-    await page.authenticate({username:user, password:pass});
+    await page.goto('https://nahir.store/products/pack-2-cd', {waitUntil: 'load', timeout: 0});
+    //await page.authenticate({username:user, password:pass});
     console.log ("INSTANCE " +currentId + ": " + "Page ouverte");
     // Attendre que la popup de pays s'affiche ( commenter si achat francais )
     //await page.waitForSelector('.recommendation-modal__container');
@@ -205,38 +205,41 @@ const puppeteerFunction = async (retryCount = 0) => {
     //console.log('Popup PAYS fermée');
 
     // Attendre que la popup s'affiche
-    await page.waitForTimeout(50000); // Le temps d'attente est en millisecondes
-    await page.waitForSelector('.privy-popup-content-wrap');
-    console.log('Popup Newlester affichée');
+    //await page.waitForTimeout(30000); // Le temps d'attente est en millisecondes
+    //await page.waitForSelector('.privy-popup-content-wrap');
+    //console.log('Popup Newlester affichée');
     // Attendre que la popup soit visible
-    await page.waitForFunction(() => {
-      const popup = document.querySelector('.privy-popup-content-wrap');
-      return popup && window.getComputedStyle(popup).getPropertyValue('display') !== 'none';
-    });
-    console.log('Popup Newlester visible');
+    //await page.waitForFunction(() => {
+    //  const popup = document.querySelector('.privy-popup-content-wrap');
+    //  return popup && window.getComputedStyle(popup).getPropertyValue('display') !== 'none';
+    //});
+    //console.log('Popup Newlester visible');
     // Fermer la popup
-    await page.click('.privy-dismiss-content');
+    //await page.click('.privy-dismiss-content');
 
     //console.log('Popup Cookies fermée');
 
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
+    //await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
     // Attendre que le bouton "Ajouter au panier" apparaisse
-    await page.waitForSelector('.AddToCart');
+
+    await page.waitForSelector('.ProductForm__AddToCart');
     console.log ("INSTANCE " +currentId + ": " + "Page chargée");
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
     // Cliquer sur le bouton "Ajouter au panier"
-    await page.click('.AddToCart');
+    await page.click('.ProductForm__AddToCart');
     console.log ("INSTANCE " +currentId + ": " + "Ajout au panier");
     // Faire une pause de 10 secondes
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
 
     let order_number_product = 1;
     let randomNum = Math.round(Math.random()); // Génère un nombre aléatoire entre 0 et 1
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
     for(let i=0; i<randomNum; i++){
-      await page.click('.ajaxcart__qty-adjust.ajaxcart__qty-adjust--bundle.ajaxcart__qty--plus.icon-fallback-text');
+      const linkHref = '/cart/change?quantity=2&line=1';
+      await page.waitForSelector(`a[href="${linkHref}"]`);
+      await page.click(`a[href="${linkHref}"]`);
       order_number_product++;
-      await page.waitForTimeout(10000); // attend une seconde avant le prochain clic
+      await page.waitForTimeout(5000); // attend une seconde avant le prochain clic
     }
     data.order_number_product = order_number_product;
     
@@ -245,129 +248,76 @@ const puppeteerFunction = async (retryCount = 0) => {
     console.log( "INSTANCE " +currentId + ": " + "Nombre de PACK ajoutés au panier NUMBER_PACK: ", data.order_number_pack);
 
     // Faire une pause de 10 secondes
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
+    //await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
 
     data.order_number_exclusive = 0;
     data.order_number_standard = 0;
     // Génère un nombre aléatoire entre 0 et 2
-
-    if(data.order_number_pack == 1){
-      console.log("INSTANCE " +currentId + ": " + "Nombre de CD unique à acheter: 1 car NUMBER_PACK = 1");
-      // Aléatoirement acheter le CD Rêves II Rue Edition Exclusive ou Standard
-      let randomNumber = Math.floor(Math.random() * 3);
-      console.log("INSTANCE " +currentId + ": " + "Nombre aléatoire entre 0 et 2: ", randomNumber);
-      if (randomNumber == 1) {
-        await page.goto('https://iktlf.shop/products/cd-reves-2-rue-edition-exclusive', {waitUntil: 'load', timeout: 0});
-        await page.authenticate({username: user, password: pass});
-        // Attendre que le bouton "Ajouter au panier" apparaisse
-        await page.waitForSelector('.AddToCart');
-        console.log ("INSTANCE " +currentId + ": " + "Page chargée");
-        await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
-        // Cliquer sur le bouton "Ajouter au panier"
-        await page.click('.AddToCart');
-        console.log ("INSTANCE " +currentId + ": " + "Ajout au panier CD Rêves II Rue Edition Exclusive");
-
-        data.order_number_exclusive = 1;
-        data.order_number_product = data.order_number_product + 1;
-
-        // Faire une pause de 10 secondes
-        await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
-
-      } else if (randomNumber == 2) {
-        await page.goto('https://iktlf.shop/products/cd-reves-ii-rue-edition-standard', {waitUntil: 'load', timeout: 0});
-        await page.authenticate({username: user, password: pass});
-        // Attendre que le bouton "Ajouter au panier" apparaisse
-        await page.waitForSelector('.AddToCart');
-        console.log ("INSTANCE " +currentId + ": " + "Page chargée");
-        await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
-        // Cliquer sur le bouton "Ajouter au panier"
-        await page.click('.AddToCart');
-        console.log ("INSTANCE " +currentId + ": " + "Ajout au panier d'un CD Rêves II Rue Edition Standard");
-
-        data.order_number_product = data.order_number_product + 1;
-        data.order_number_standard = 1;
-        
-        // Faire une pause de 10 secondes
-        await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
-      }else {
-        console.log("INSTANCE " +currentId + ": " + "Aucun CD Individuel ajouté au panier");
-      }
-    }
     updateOrderContent(new_order_number,data.order_number_pack, data.order_number_exclusive, data.order_number_standard);
+    console.log ("INSTANCE " +currentId + ": " + "Appuie sur le boutton 'Checkout'");
+    await page.waitForSelector('button[name="checkout"]');
+    await page.evaluate(() => {
+        let elements = document.getElementsByName('checkout');
+        elements[0].click();
+    });
 
     await Promise.all([
       page.waitForNavigation(),
-      page.goto('https://iktlf.shop/cart', { timeout: 0 }),
-      page.authenticate({username:user, password:pass})
+      //page.authenticate({username:user, password:pass})
     ]);
 
     console.log ("INSTANCE " +currentId + ": " + "Page panier chargée");
     
     //await page.screenshot({ path: `Image/panier_view_${new_order_number}.png` });
 
-    // Cocher la case "J'ai lu et j'accepte les Conditions Générales de Vente"
-    const generalConditionsInput = await page.$('#general-condtions-input');
-    if (generalConditionsInput) {
-      await generalConditionsInput.click();
-    }
-
-    // Attendre que la case soit cochée
-    await page.waitForSelector('#general-condtions-input:checked');
-    console.log("INSTANCE " +currentId + ": " + 'Conditions Générales de Vente cochées');
-
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
     //await page.screenshot({ path: `Image/panier_${new_order_number}.png` });
 
-    // Trouver et cliquer sur le bouton "Procéder au paiement"
-    const checkoutButton = await page.$('input.checkout-cart');
-    if (checkoutButton) {
-      await checkoutButton.click();
-    }
-    console.log("INSTANCE " +currentId + ": " + 'Bouton "Procéder au paiement" cliqué');
-
-    await page.waitForTimeout(15000); 
-    await page.waitForSelector('#checkout_email');
-    await page.type('#checkout_email', EMAIL);
-    await page.type('#checkout_shipping_address_country', COUNTRY);
-    await page.type('#checkout_shipping_address_first_name', FIRST_NAME);
-    await page.type('#checkout_shipping_address_last_name', LAST_NAME);
-    await page.type('#checkout_shipping_address_address1', ADDRESS);
-    await page.type('#checkout_shipping_address_city', CITY);
-    await page.type('#checkout_shipping_address_zip', ZIP);
+    await page.waitForSelector('#email');
+    await page.type('#email', EMAIL);
+    await page.type('#TextField0', FIRST_NAME);
+    await page.type('#TextField1', LAST_NAME);
+    await page.type('#address1', ADDRESS);
+    await page.type('#TextField6', CITY);
+    await page.type('#TextField5', ZIP);
     let formattedPhoneNumber = PHONE.slice(0, 2) + " " + PHONE.slice(2, 4) + " " + PHONE.slice(4, 6) + " " + PHONE.slice(6, 8) + " " + PHONE.slice(8, 10);
-
-    await page.type('#checkout_shipping_address_phone', formattedPhoneNumber);
-
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
+    await page.type('#TextField7', formattedPhoneNumber);
 
     console.log("INSTANCE " +currentId + ": " + 'Informations de livraison renseignées');
 
-    // Cliquer sur le bouton "Continuer vers les frais de port"
-    await page.click('#continue_button');
+    await page.waitForSelector('button[type="submit"]');
+    await page.click('button[type="submit"]');
 
-    console.log("INSTANCE " +currentId + ": " + 'Bouton "Continuer vers les frais de port" cliqué');
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
 
-    // Faire une pause de 10 secondes
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
-    // Sélectionner le deuxième bouton radio dans les divs .radio-wrapper
-    const radios = await page.$$('.radio-wrapper input[type=radio]');
+    console.log("INSTANCE " +currentId + ": " + 'Continuer vers lexpedition');
 
-
-    await radios[1].click();
-
-    console.log("INSTANCE " +currentId + ": " + 'Bouton radio sélectionné');
-    // Cliquer sur le bouton "Continuer vers le paiement"
-    await page.click('#continue_button');
+    await page.waitForSelector('button[type="submit"]');
+    await page.click('button[type="submit"]');
 
     console.log("INSTANCE " +currentId + ": " + 'Bouton "Continuer vers le paiement" cliqué');
-    // Faire une pause de 10 secondes
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
 
-    await page.waitForSelector('#continue_button');
-    await page.click('#continue_button'); 
+    // Faire une pause de 10 secondes
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
+    // Sélectionner le deuxième bouton radio dans les divs .radio-wrapper
+
+    await page.waitForSelector('button[type="submit"]');
+    await page.click('button[type="submit"]');
+
+    console.log("INSTANCE " +currentId + ": " + 'Bouton "verifier la commande" cliqué');
+
     
     // Faire une pause de 10 secondes
-    await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
+    await page.waitForTimeout(5000); // Le temps d'attente est en millisecondes
+
+    await page.waitForSelector('button[type="submit"]');
+    await page.click('button[type="submit"]');
+
+    console.log("INSTANCE " +currentId + ": " + 'Bouton "payé maintenant" cliqué');
+
+
+    await page.waitForTimeout(5000);
+
 
     await page.waitForSelector('#fCardNumber');
     await page.type('#fCardNumber', cardData.card_number);
@@ -382,6 +332,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     await page.type('#cvvid', cardData.cvv.toString());  
     
     console.log("INSTANCE " +currentId + ": " + 'Informations de paiement renseignées');
+    await page.waitForTimeout(30000); // Le temps d'attente est en millisecondes
 
     await page.click('#validationButtonCard');
     await page.waitForTimeout(15000); // Le temps d'attente est en millisecondes
@@ -412,7 +363,7 @@ const puppeteerFunction = async (retryCount = 0) => {
     }
     await browser.close();
   } catch (error) {
-    /*if (
+    if (
       error.message.toLowerCase().includes('net::') ||
       error.message.includes('JSHandles can be evaluated only in the context they were created') ||
       error.message.includes('Node is either not clickable or not an HTMLElement') ||
@@ -424,20 +375,21 @@ const puppeteerFunction = async (retryCount = 0) => {
       error.message.includes('Cannot extract value when objectId') ||
       (error instanceof SyntaxError && error.message.includes('Unexpected token'))
     ) {
-      */
       console.error("INSTANCE " +currentId + ": " + 'An error occurred: ', error);
       await updateOrderStatus(data.order_number, 'FAILED_PROCESSING');
-      if (retryCount > 15) {
+      if (retryCount > 10) {
         console.log("INSTANCE " +currentId + ": " + 'ANNULATION DU RETRY');
       } else if (retryCount > 0 ) {
-        console.log("INSTANCE " +currentId + ": " + 'RETRY ' + retryCount + ' EN COURS');
+        console.log("INSTANCE " +currentId + ": " + 'RETRY');
         puppeteerFunction( retryCount + 1);
       } else {
         console.log("INSTANCE " +currentId + ": " + ' PREMIER RETRY');
         puppeteerFunction(1);
       }
-    //} 
-
+      return;
+    }
+    
+    console.log("INSTANCE " +currentId + ": " + 'Suppression de la ligne 2 du fichier user_info.csv');
     console.log("INSTANCE " +currentId + ": " + "BLOC CATCH erreur : " + error);
     console.log(error)
     data.order_status = 'FAILED_PROCESSING';
@@ -449,20 +401,20 @@ const puppeteerFunction = async (retryCount = 0) => {
 };
 
 // Heures de début et de fin UTC 
-const startHour = 07;
-const endHour = 11;
+const startHour = 18;
+const endHour = 23;
 
-const commandSize = 17;
+const commandSize = 6;
 
 
 // Générer 200 heures aléatoires entre 13h et 17h
 const generateRandomHours = () => {
   let randomHours = [];
+
   while (randomHours.length < commandSize) {
       let randomHour = Math.floor(Math.random() * (endHour - startHour + 1)) + startHour;
       let randomMinute = Math.floor(Math.random() * 60);
       let randomSecond = Math.floor(Math.random() * 60);
-    
 
       let randomTime = new Date();
       randomTime.setUTCHours(randomHour, randomMinute, randomSecond);
@@ -488,7 +440,6 @@ const scheduleExecutions = (hours) => {
       const [h, m, s] = hour.split(':');
       const hourDate = new Date();
       hourDate.setUTCHours(h, m, s);
-      hourDate.setDate(30);
       return hourDate > now;
   });
 
@@ -512,6 +463,6 @@ const scheduleExecutions = (hours) => {
   }
 }
 
-let randomHours = generateRandomHours();
-scheduleExecutions(randomHours);
-//puppeteerFunction();
+//let randomHours = generateRandomHours();
+//scheduleExecutions(randomHours);
+puppeteerFunction();
