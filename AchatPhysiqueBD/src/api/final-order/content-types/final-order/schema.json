@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "final_orders",
+  "info": {
+    "singularName": "final-order",
+    "pluralName": "final-orders",
+    "displayName": "Final_order"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "date": {
+      "type": "datetime"
+    },
+    "address_info": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::address-info.address-info"
+    },
+    "bank_info": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::bank-info.bank-info"
+    },
+    "status": {
+      "type": "string"
+    },
+    "pack_number": {
+      "type": "integer"
+    },
+    "article1_number": {
+      "type": "integer"
+    },
+    "article2_number": {
+      "type": "integer"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "relay_adress": {
+      "type": "text"
+    }
+  }
+}

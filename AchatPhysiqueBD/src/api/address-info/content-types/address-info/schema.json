@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "address_infos",
+  "info": {
+    "singularName": "address-info",
+    "pluralName": "address-infos",
+    "displayName": "address_info",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "country": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "integer"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "client_order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::client-order.client-order"
+    },
+    "used": {
+      "type": "boolean"
+    }
+  }
+}

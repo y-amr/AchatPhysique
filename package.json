@@ -1,19 +1,5 @@
 {
-    "name": "my-package",
-    "version": "1.0.0",
-    "description": "My Package",
-    "main": "index.js",
-    "scripts": {
-      "start": "node index.js"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "MIT",
-    "dependencies": {
-      "csv-parser": "^3.1.1",
-      "node-cron": "^3.1.0",
-      "nodemailer": "^6.5.0",
-      "csv-writer": "^2.7.0",
-      "puppeteer": "^12.0.0"
-    }
+  "dependencies": {
+    "puppeteer": "^20.3.0"
   }
+}

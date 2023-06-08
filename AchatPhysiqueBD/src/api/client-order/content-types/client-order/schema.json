@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "client_orders",
+  "info": {
+    "singularName": "client-order",
+    "pluralName": "client-orders",
+    "displayName": "Client_order",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "client_name": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "order_size": {
+      "type": "integer"
+    },
+    "script_name": {
+      "type": "string"
+    },
+    "active_command": {
+      "type": "string"
+    }
+  }
+}

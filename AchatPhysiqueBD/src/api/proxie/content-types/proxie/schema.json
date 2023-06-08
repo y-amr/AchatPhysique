@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "proxies",
+  "info": {
+    "singularName": "proxie",
+    "pluralName": "proxies",
+    "displayName": "Proxie",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "host": {
+      "type": "string"
+    },
+    "port": {
+      "type": "string"
+    },
+    "user": {
+      "type": "string"
+    },
+    "pass": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    }
+  }
+}

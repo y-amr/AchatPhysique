@@ -1,0 +1,13 @@
+ID_USER,EMAIL,COUNTRY,FIRST_NAME,LAST_NAME,ADDRESS,CITY,ZIP,PHONE
+1,linda.ouchene@gmail.com,France,Linda,Ouchene,2 rue Paul Verlaine,La Courneuve,75027,0612345678
+2,areski.djebbar@gmail.com,France,Areski,Djebbar,5 rue du Président Georges Pompidou,Dugny,93440,0632109876
+3,ryad.mebarki@gmail.com,France,Ryad,Mebarki,36 rue Jean Moulin,Garges-lès-Gonesse,95140,0678901234
+4,sabrina.djebbar@gmail.com,France,Sabrina,Djebbar,9 rue des Doucettes,Garges-lès-Gonesse,95140,0698765432
+5,michael.bedia@gmail.com,France,Michael,Bedia,65 boulevard Hippolyte Marques,Ivry-sur-Seine,94205,0643210987
+6,mendes.jb@gmail.com,France,Mendes,JB,5 avenue Albert 1er,Eaubonne,95600,0632109876
+7,ismael.djebbar@gmail.com,France,Ismael,Djebbar,6 rue de Bosnier,Le Mesnil-Amelot,77990,0610987654
+8,hakim.zerouali@gmail.com,France,Hakim,Zerouali,1 allée de la Côte d'Or,Créteil,94000,0654321098
+9,ali.zerouali@gmail.com,France,Ali,Zerouali,8 Rue du Clos Vougeot,Créteil,94000,0612345678
+10,magou.ebenezer@gmail.com,France,Magou,Ebenezer,16 rue Salvador Allende,Stains,93072,0632109876
+11,le.royce.lounge@gmail.com,France,Royce,Lounge,39 boulevard Anatole France,Saint Denis,93200,0678901234
+12,aboubacar.magassouba@gmail.com,France,Aboubacar,Magassouba,6 passage Machouart,Aubervilliers,75005,0698765432

@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bank_infos",
+  "info": {
+    "singularName": "bank-info",
+    "pluralName": "bank-infos",
+    "displayName": "bank_info",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name_card": {
+      "type": "string"
+    },
+    "expiry_month": {
+      "type": "integer"
+    },
+    "expiry_year": {
+      "type": "decimal"
+    },
+    "card_number": {
+      "type": "string"
+    },
+    "cvv": {
+      "type": "string"
+    }
+  }
+}
